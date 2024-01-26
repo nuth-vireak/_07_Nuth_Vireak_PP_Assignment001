@@ -1,8 +1,24 @@
 import org.nocrala.tools.texttablefmt.*;
 
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class Main {
+
+    enum Color {
+        ANSI_RED("\u001B[31m"),
+        ANSI_BLACK("\u001B[30m");
+
+        private final String color;
+
+        Color(String color) {
+            this.color = color;
+        }
+
+        public String getColor() {
+            return color;
+        }
+    }
 
     // Initialize Scanner
     private static final Scanner scanner = new Scanner(System.in);
@@ -18,12 +34,25 @@ public class Main {
 
         // Initialize Scanner
 
-        System.out.println("-------------- Setting up Buse --------------");
+        System.out.println("-------------- Setting up Buses --------------");
 
         System.out.print("-> Enter number of Buses: ");
+        while (!scanner.hasNext("[1-9]*")) {
+            if (scanner.hasNext("[0-9]")) {
+                System.out.println("");
+            }
+            System.out.println(Color.ANSI_RED.getColor() + "-> Error: Invalid Input. Please enter only numeric values." + Color.ANSI_BLACK.getColor());
+            System.out.print("-> Enter number of Buses: ");
+            scanner.next();
+        }
         numberOfBuses = scanner.nextInt();
 
         System.out.print("-> Enter number Seat of bus: ");
+        while (!scanner.hasNext("[1-9]*")) {
+            System.out.println("Error: Invalid number Seat of bus.");
+            System.out.print("-> Enter number Seat of bus: ");
+            scanner.next();
+        }
         numberSeatsPerBus = scanner.nextInt();
 
         // Initialize Buses
@@ -40,6 +69,11 @@ public class Main {
             System.out.println("5- Exit");
             System.out.println("---------------------------------------------------");
             System.out.print("-> Choose option(1-5): ");
+            while (!scanner.hasNext("[1-9]*")) {
+                System.out.println("Error: Invalid Input. Please enter only numeric values.");
+                System.out.print("-> Choose option(1-5): ");
+                scanner.next();
+            }
             option = scanner.nextInt();
 
             switch (option) {
@@ -129,7 +163,7 @@ public class Main {
     }
 
     private static void displayAllBusInformation() {
-        // ANSI escape codes for colors
+        // ANSI codes for colors
         final String ANSI_RESET = "\u001B[0m";
         final String ANSI_GREEN = "\u001B[32m";
         final String ANSI_RED = "\u001B[31m";
@@ -152,6 +186,7 @@ public class Main {
         table.setColumnWidth(2, 20, 25);
         table.setColumnWidth(3, 20, 25);
 
+        // loop
         for (int i = 0; i < numberOfBuses; i++) {
             availableSeats = 0;
             unavailableSeats = 0;
@@ -165,7 +200,7 @@ public class Main {
             table.addCell(String.valueOf(i + 1), numberCellStyle);
             table.addCell(ANSI_BLUE + numberSeatsPerBus + ANSI_BLUE, numberCellStyle);
             table.addCell(ANSI_GREEN + availableSeats + ANSI_GREEN, numberCellStyle);
-            table.addCell(ANSI_RED + (numberSeatsPerBus - availableSeats) + ANSI_RED, numberCellStyle);
+            table.addCell(ANSI_RED + (unavailableSeats) + ANSI_RED, numberCellStyle);
         }
 
         System.out.println("---------- Display All Bus information ----------");
@@ -184,13 +219,16 @@ public class Main {
     private static void displayBusInformation(int busId) {
         System.out.println("---------- Display Bus information ----------");
 
+        availableSeats = 0;
+        unavailableSeats = 0;
+
         for (int i = 0; i < numberSeatsPerBus; i++) {
-            availableSeats = 0;
-            unavailableSeats = 0;
             if (buses[busId - 1][i] == 0) {
                 System.out.print("(+) ");
+                availableSeats++;
             } else {
                 System.out.print("(-) ");
+                unavailableSeats++;
             }
             System.out.print((i + 1) + "\t\t");
             if ((i + 1) % 5 == 0) {
@@ -199,7 +237,7 @@ public class Main {
         }
         System.out.println();
 
-        System.out.println("(-) : Unavailable(" + unavailableSeats + ")" + "\t\t" + "(+) : Available(" + (numberSeatsPerBus - unavailableSeats) + ")");
+        System.out.println("(-) : Unavailable(" + unavailableSeats + ")" + "\t\t" + "(+) : Available(" + (availableSeats) + ")");
 
     }
 }
