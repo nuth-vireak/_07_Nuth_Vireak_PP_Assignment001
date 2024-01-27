@@ -169,7 +169,7 @@ public class Main {
     private static void bookingBus() {
 
         // Input for bus ID
-        System.out.print("-> Enter bus’s Id: ");
+        System.out.print("-> Enter bus Id: ");
         String inputBusId = scanner.next();
         while (!isInputValid(inputBusId, numberOfBuses)) {
             System.out.println(Color.ANSI_RED.getColor() + "-> Error: Invalid Input. Please enter a bus ID between 1 and " + numberOfBuses + "." + Color.ANSI_BLACK.getColor());
@@ -218,7 +218,7 @@ public class Main {
     private static void cancelBooking() {
 
         // Input for bus ID
-        System.out.print("-> Enter bus’s Id: ");
+        System.out.print("-> Enter bus Id: ");
         String inputBusId = scanner.next();
         while (!isInputValid(inputBusId, numberOfBuses)) {
             System.out.println(Color.ANSI_RED.getColor() + "-> Error: Invalid Input. Please enter a bus ID between 1 and " + numberOfBuses + "." + Color.ANSI_BLACK.getColor());
